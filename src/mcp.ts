@@ -45,7 +45,7 @@ export class MCPClient {
     iView[0] = MessageType.data & Number(data.isHeadLightsOn);
     iView[2] = data.rotation;
 
-    this.socket.write(Buffer.from(buffer));
+    this.socket.write(Buffer.from(buffer).toString("binary"));
     return this;
   }
 
@@ -79,8 +79,15 @@ export class MCPServer extends EventEmitter {
         .on("data", (buffer) => {
           const messageType = this.messageType(buffer);
           let data;
-          if (messageType == MessageType.data) data = this.parseData(buffer);
-          else data = buffer.toString().substring(1);
+
+          switch (messageType) {
+            case MessageType.data:
+              data = this.parseData(buffer);
+              break;
+            case MessageType.signIn:
+              data = buffer.toString().substring(1);
+              break;
+          }
 
           this.emit(messageType.toString(), data, socket);
         });
