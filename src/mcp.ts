@@ -45,7 +45,7 @@ export class MCPClient {
     iView[0] = MessageType.data & Number(data.isHeadLightsOn);
     iView[2] = data.rotation;
 
-    this.socket.write(Buffer.from(buffer).toString("binary"));
+    this.socket.write(Buffer.from(buffer));
     return this;
   }
 
