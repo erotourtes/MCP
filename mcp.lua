@@ -7,15 +7,15 @@ function mcp_proto.dissector(buffer, pinfo, tree)
   local message_type = buffer(0, 1)
   local message_type_msg = "Password"
   if message_type:uint() == 0 or message_type:uint() == 1 then
-	  message_type_msg = "Data"
+    message_type_msg = "Data"
   end
   subtree:add(message_type, "Message type: " .. message_type_msg)
 
-  if message_type_msg == "Data" then -- data
+  if message_type_msg == "Data" then
     local is_light_on = buffer(0, 1)
     local is_light_on_msg = "on"
     if message_type:uint() == 0 then
-	  is_light_on_msg = "off"
+      is_light_on_msg = "off"
     end
 
     subtree:add(is_light_on, "Is light on: " .. is_light_on_msg)
@@ -28,7 +28,6 @@ function mcp_proto.dissector(buffer, pinfo, tree)
   else
     local password = buffer(1, buffer:len() - 1)
     subtree:add(password, "Password: " .. password:string())
-
   end
 end
 
